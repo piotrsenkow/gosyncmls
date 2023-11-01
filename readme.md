@@ -30,7 +30,7 @@ A Go application designed to fetch historical property listings and periodically
 1. Clone the repository:
     ```bash
     git clone https://github.com/piotrsenkow/gosyncmls.git
-    cd mls-grid-property-updater
+    cd gosyncmls
     ```
 
 2. Install the required Go packages:
