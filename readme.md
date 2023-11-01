@@ -1,6 +1,5 @@
 # GoSyncMLS!
-![home](https://github.com/piotrsenkow/gosyncmls/assets/25436323/cdd2bfda-2793-47ac-927b-6f16c15c00a9)
-
+![home](https://github.com/piotrsenkow/gosyncmls/assets/25436323/6defb904-970f-4deb-a695-12753a9fe0ed)
 A Go application designed to fetch historical property listings and periodically update your local database with new listings from the MLS Grid API.
 ## Features
 
