@@ -44,7 +44,7 @@ A Go application designed to fetch historical property listings and periodically
 Set up the required environment variables:
 
 - `API_BEARER_TOKEN`: Your MLS Grid API bearer token. Obtain one by applying for a data license at [mlsgrid.com](https://mlsgrid.com).
-- `DB_CONN_STRING`: Your postgreSQL connection string.
+- `DB_CONN_STRING`: Your postgreSQL connection string. Example: `postgresql://user:password@localhost:5432/mred`
 
 ### Running the Application
 
