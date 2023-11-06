@@ -1,5 +1,4 @@
 -- Properties Table
--- need a key for closeprice
 SET TIME ZONE 'UTC';
 
 CREATE TABLE properties (

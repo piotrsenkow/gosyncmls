@@ -587,12 +587,12 @@ func main() {
 	startTickers()
 
 	handleApiErrors(func() error {
-		//var nextUrl string = initialUrl
-		timestamp, err := getLastModificationTimestamp()
-		if err != nil {
-			logEvent("info", "Couldn't get last modification timestamp ")
-		}
-		var nextUrl string = constructUpdateURL(timestamp)
+		var nextUrl string = initialUrl
+		//timestamp, err := getLastModificationTimestamp()
+		//if err != nil {
+		//	logEvent("info", "Couldn't get last modification timestamp ")
+		//}
+		//var nextUrl string := constructUpdateURL(timestamp)
 
 		for {
 			if nextUrl == "" {
