@@ -98,23 +98,23 @@ type Property struct {
 	MRD_LSZ                string    `json:"MRD_LSZ"`
 	MRD_MAF                string    `json:"MRD_MAF"`
 
-	GrossIncome          int    `json:"GrossIncome"`
-	AdditionalParcelsYN  bool   `json:"AdditionalParcelsYN"`
-	ParcelNumber         string `json:"ParcelNumber"`
-	ExpirationDate       string `json:"ExpirationDate"`
-	MRD_MASTER_ASSOC_FEE string `json:"MRD_MASTER_ASSOC_FEE"`
-	MRD_MAIN_SQFT        string `json:"MRD_MAIN_SQFT"`
-	MRD_UNIT_SQFT        string `json:"MRD_UNIT_SQFT"`
-	MRD_UPPER_SQFT       string `json:"MRD_UPPER_SQFT"`
-	MRD_LOWER_SQFT       string `json:"MRD_LOWER_SQFT"`
-	Ownership            string `json:"Ownership"`
-	SubdivisionName      string `json:"SubdivisionName"`
-	MRD_MGT              string `json:"MRD_MGT"`
-	MRD_MIN              string `json:"MRD_MIN"`
-	MRD_MIN_LP           string `json:"MRD_MIN_LP"`
-	MRD_MAX_LP           string `json:"MRD_MAX_LP"`
-	MRD_MIN_RP           string `json:"MRD_MIN_RP"`
-	MRD_MAX_RP           string `json:"MRD_MAX_RP"`
+	GrossIncome          IntValue `json:"GrossIncome"`
+	AdditionalParcelsYN  bool     `json:"AdditionalParcelsYN"`
+	ParcelNumber         string   `json:"ParcelNumber"`
+	ExpirationDate       string   `json:"ExpirationDate"`
+	MRD_MASTER_ASSOC_FEE string   `json:"MRD_MASTER_ASSOC_FEE"`
+	MRD_MAIN_SQFT        string   `json:"MRD_MAIN_SQFT"`
+	MRD_UNIT_SQFT        string   `json:"MRD_UNIT_SQFT"`
+	MRD_UPPER_SQFT       string   `json:"MRD_UPPER_SQFT"`
+	MRD_LOWER_SQFT       string   `json:"MRD_LOWER_SQFT"`
+	Ownership            string   `json:"Ownership"`
+	SubdivisionName      string   `json:"SubdivisionName"`
+	MRD_MGT              string   `json:"MRD_MGT"`
+	MRD_MIN              string   `json:"MRD_MIN"`
+	MRD_MIN_LP           string   `json:"MRD_MIN_LP"`
+	MRD_MAX_LP           string   `json:"MRD_MAX_LP"`
+	MRD_MIN_RP           string   `json:"MRD_MIN_RP"`
+	MRD_MAX_RP           string   `json:"MRD_MAX_RP"`
 
 	CumulativeDaysOnMarket int    `json:"CumulativeDaysOnMarket"`
 	LeaseTerm              string `json:"LeaseTerm"`
@@ -155,11 +155,11 @@ type Property struct {
 	NetOperatingIncome     IntValue  `json:"NetOperatingIncome"`
 	NewConstructionYN      bool      `json:"NewConstructionYN"`
 	OffMarketDate          string    `json:"OffMarketDate"`
-	OperatingExpense       int       `json:"OperatingExpense"`
+	OperatingExpense       IntValue  `json:"OperatingExpense"`
 	OriginalEntryTimestamp time.Time `json:"OriginalEntryTimestamp"`
 	OtherEquipment         []string  `json:"OtherEquipment"`
 	OtherStructures        []string  `json:"OtherStructures"`
-	ParkingTotal           int       `json:"ParkingTotal"`
+	ParkingTotal           IntValue  `json:"ParkingTotal"`
 	PostalCodePlus4        string    `json:"PostalCodePlus4"`
 	PreviousListPrice      int       `json:"PreviousListPrice"`
 	PurchaseContractDate   string    `json:"PurchaseContractDate"`
@@ -170,8 +170,8 @@ type Property struct {
 	StreetDirPrefix        string    `json:"StreetDirPrefix"`
 	StreetSuffix           string    `json:"StreetSuffix"`
 	TotalActualRent        IntValue  `json:"TotalActualRent"`
-	TrashExpense           int       `json:"TrashExpense"`
-	WaterSewerExpense      int       `json:"WaterSewerExpense"`
+	TrashExpense           IntValue  `json:"TrashExpense"`
+	WaterSewerExpense      IntValue  `json:"WaterSewerExpense"`
 	Zoning                 string    `json:"Zoning"`
 	ListAgentEmail         string    `json:"ListAgentEmail"`
 	ListAgentFirstName     string    `json:"ListAgentFirstName"`
