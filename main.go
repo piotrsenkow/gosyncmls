@@ -98,34 +98,34 @@ type Property struct {
 	MRD_LSZ                string    `json:"MRD_LSZ"`
 	MRD_MAF                string    `json:"MRD_MAF"`
 
-	GrossIncome          int       `json:"GrossIncome"`
-	AdditionalParcelsYN  bool      `json:"AdditionalParcelsYN"`
-	ParcelNumber         string    `json:"ParcelNumber"`
-	ExpirationDate       time.Time `json:"ExpirationDate"`
-	MRD_MASTER_ASSOC_FEE string    `json:"MRD_MASTER_ASSOC_FEE"`
-	MRD_MAIN_SQFT        string    `json:"MRD_MAIN_SQFT"`
-	MRD_UNIT_SQFT        string    `json:"MRD_UNIT_SQFT"`
-	MRD_UPPER_SQFT       string    `json:"MRD_UPPER_SQFT"`
-	MRD_LOWER_SQFT       string    `json:"MRD_LOWER_SQFT"`
-	Ownership            string    `json:"Ownership"`
-	SubdivisionName      string    `json:"SubdivisionName"`
-	MRD_MGT              string    `json:"MRD_MGT"`
-	MRD_MIN              string    `json:"MRD_MIN"`
-	MRD_MIN_LP           string    `json:"MRD_MIN_LP"`
-	MRD_MAX_LP           string    `json:"MRD_MAX_LP"`
-	MRD_MIN_RP           string    `json:"MRD_MIN_RP"`
-	MRD_MAX_RP           string    `json:"MRD_MAX_RP"`
+	GrossIncome          int    `json:"GrossIncome"`
+	AdditionalParcelsYN  bool   `json:"AdditionalParcelsYN"`
+	ParcelNumber         string `json:"ParcelNumber"`
+	ExpirationDate       string `json:"ExpirationDate"`
+	MRD_MASTER_ASSOC_FEE string `json:"MRD_MASTER_ASSOC_FEE"`
+	MRD_MAIN_SQFT        string `json:"MRD_MAIN_SQFT"`
+	MRD_UNIT_SQFT        string `json:"MRD_UNIT_SQFT"`
+	MRD_UPPER_SQFT       string `json:"MRD_UPPER_SQFT"`
+	MRD_LOWER_SQFT       string `json:"MRD_LOWER_SQFT"`
+	Ownership            string `json:"Ownership"`
+	SubdivisionName      string `json:"SubdivisionName"`
+	MRD_MGT              string `json:"MRD_MGT"`
+	MRD_MIN              string `json:"MRD_MIN"`
+	MRD_MIN_LP           string `json:"MRD_MIN_LP"`
+	MRD_MAX_LP           string `json:"MRD_MAX_LP"`
+	MRD_MIN_RP           string `json:"MRD_MIN_RP"`
+	MRD_MAX_RP           string `json:"MRD_MAX_RP"`
 
-	CumulativeDaysOnMarket int       `json:"CumulativeDaysOnMarket"`
-	LeaseTerm              string    `json:"LeaseTerm"`
-	MRD_NEW_CONSTR_YN      string    `json:"MRD_NEW_CONSTR_YN"`
-	MRD_ORP                string    `json:"MRD_ORP"`
-	MRD_AON                string    `json:"MRD_AON"`
-	MRD_B78                string    `json:"MRD_B78"`
-	MRD_BAS                string    `json:"MRD_BAS"`
-	MRD_BD3                string    `json:"MRD_BD3"`
-	CloseDate              time.Time `json:"CloseDate"`
-	FrontageLength         string    `json:"FrontageLength"`
+	CumulativeDaysOnMarket int    `json:"CumulativeDaysOnMarket"`
+	LeaseTerm              string `json:"LeaseTerm"`
+	MRD_NEW_CONSTR_YN      string `json:"MRD_NEW_CONSTR_YN"`
+	MRD_ORP                string `json:"MRD_ORP"`
+	MRD_AON                string `json:"MRD_AON"`
+	MRD_B78                string `json:"MRD_B78"`
+	MRD_BAS                string `json:"MRD_BAS"`
+	MRD_BD3                string `json:"MRD_BD3"`
+	CloseDate              string `json:"CloseDate"`
+	FrontageLength         string `json:"FrontageLength"`
 
 	MRD_PARKING_ONSITE       string `json:"MRD_PARKING_ONSITE"`
 	MRD_PKN                  string `json:"MRD_PKN"`
@@ -152,9 +152,9 @@ type Property struct {
 	MRD_UD                   string `json:"MRD_UD"`
 	MRD_UFL                  string `json:"MRD_UFL"`
 
-	NetOperatingIncome     string    `json:"NetOperatingIncome"`
+	NetOperatingIncome     IntValue  `json:"NetOperatingIncome"`
 	NewConstructionYN      bool      `json:"NewConstructionYN"`
-	OffMarketDate          time.Time `json:"OffMarketDate"`
+	OffMarketDate          string    `json:"OffMarketDate"`
 	OperatingExpense       int       `json:"OperatingExpense"`
 	OriginalEntryTimestamp time.Time `json:"OriginalEntryTimestamp"`
 	OtherEquipment         []string  `json:"OtherEquipment"`
@@ -162,14 +162,14 @@ type Property struct {
 	ParkingTotal           int       `json:"ParkingTotal"`
 	PostalCodePlus4        string    `json:"PostalCodePlus4"`
 	PreviousListPrice      int       `json:"PreviousListPrice"`
-	PurchaseContractDate   time.Time `json:"PurchaseContractDate"`
+	PurchaseContractDate   string    `json:"PurchaseContractDate"`
 	RentIncludes           []string  `json:"RentIncludes"`
 	StandardStatus         string    `json:"StandardStatus"`
 	StateOrProvince        string    `json:"StateOrProvince"`
 	StatusChangeTimestamp  time.Time `json:"StatusChangeTimestamp"`
 	StreetDirPrefix        string    `json:"StreetDirPrefix"`
 	StreetSuffix           string    `json:"StreetSuffix"`
-	TotalActualRent        int       `json:"TotalActualRent"`
+	TotalActualRent        IntValue  `json:"TotalActualRent"`
 	TrashExpense           int       `json:"TrashExpense"`
 	WaterSewerExpense      int       `json:"WaterSewerExpense"`
 	Zoning                 string    `json:"Zoning"`
@@ -183,7 +183,7 @@ type Property struct {
 	ListOfficeMlsId        string    `json:"ListOfficeMlsId"`
 	ListOfficeName         string    `json:"ListOfficeName"`
 	ListOfficePhone        string    `json:"ListOfficePhone"`
-	ListingContractDate    time.Time `json:"ListingContractDate"`
+	ListingContractDate    string    `json:"ListingContractDate"`
 
 	UnitTypes []UnitType `json:"UnitTypes"`
 	Rooms     []Room     `json:"Rooms"`
@@ -461,7 +461,7 @@ func insertOrUpdateProperty(property Property) (error, string) {
 			mrd_pkn, mrd_poo, mrd_pry, mrd_rd, mrd_recordmoddate, mrd_rehab_year, 
 			mrd_rental_property_type, mrd_rnp, mrd_rp, mrd_rti, mrd_sdp, mrd_short_sale,
 			mrd_smi, mrd_sqft_comments, mrd_ten, mrd_tla, mrd_tmu, mrd_tnu, mrd_tpc,
-			mrd_tpe, mrd_txc, mrd_typ, mrd_ud, mrd_ufl, net_operating_income, new_construction_yn,
+			mrd_tpe, mrd_txc, mrd_ud, mrd_ufl, net_operating_income, new_construction_yn,
 			off_market_date, operating_expense, original_entry_timestamp, other_equipment, 
 			other_structures, parking_total, postal_code_plus4, previous_list_price, purchase_contract_date, 
 			rent_includes, standard_status, state_or_province, status_change_timestamp,
@@ -472,12 +472,14 @@ func insertOrUpdateProperty(property Property) (error, string) {
         )
         VALUES (
             $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
-                $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38,
-                $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56,
-                $57, $58, $59, $60, $61, $62, $63, $64, $65, $66, $67, $68, $69, $70, $71, $72, $73, $74,
-                $75, $76, $77, $78, $79, $80, $81, $82, $83, $84, $85, $86, $87, $88, $89, $90, $91, $92,
-                $93, $94, $95, $96, $97, $98, $99, $100, $101, $102, $103, $104, $105, $106, $107, $108,
-                $109, $110, $111, $112, $113, $114, $115, $116, $117, $118, $119, $120, $121, $122, $123, $124
+			$21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38,
+			$39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56,
+			$57, $58, $59, $60, $61, $62, $63, $64, $65, $66, $67, $68, $69, $70, $71, $72, $73, $74,
+			$75, $76, $77, $78, $79, $80, $81, $82, $83, $84, $85, $86, $87, $88, $89, $90, $91, $92,
+			$93, $94, $95, $96, $97, $98, $99, $100, $101, $102, $103, $104, $105, $106, $107, $108,
+			$109, $110, $111, $112, $113, $114, $115, $116, $117, $118, $119, $120, $121, $122, $123, $124,
+			$125, $126, $127, $128, $129, $130, $131, $132, $133, $134, $135, $136, $137, $138, $139, $140,
+			$141, $142, $143, $144, $145, $146, $147, $148, $149, $150, $151, $152, $153, $154, $155, $156, $157, $158
         )
         ON CONFLICT (listing_id) DO UPDATE SET 
             property_type = EXCLUDED.property_type,
@@ -603,7 +605,6 @@ func insertOrUpdateProperty(property Property) (error, string) {
 			mrd_tpc = EXCLUDED.mrd_tpc,
 			mrd_tpe = EXCLUDED.mrd_tpe,
 			mrd_txc = EXCLUDED.mrd_txc,
-			mrd_typ = EXCLUDED.mrd_typ,
 			mrd_ud = EXCLUDED.mrd_ud,
 			mrd_ufl = EXCLUDED.mrd_ufl,
 			net_operating_income = EXCLUDED.net_operating_income,
@@ -674,7 +675,7 @@ func insertOrUpdateProperty(property Property) (error, string) {
 		property.ListAgentKey, property.ListOfficeMlsId, property.ListOfficeName, property.ListOfficePhone, property.ListingContractDate,
 	)
 	if err != nil {
-		logEvent("error", "Error on line 677")
+		logEvent("error", "Error on line 677: "+err.Error())
 		return err, "line 677"
 	}
 	rowsAffected, _ := result.RowsAffected()
@@ -834,7 +835,7 @@ func makeRequest2(url string) (ApiResponse, error) {
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		logEvent("error", fmt.Sprintf("Failed to make request to %s. Error: %s", url, err.Error()))
+		logEvent("error", "Error: "+err.Error())
 		return ApiResponse{}, err
 	}
 
@@ -880,12 +881,12 @@ func main() {
 	startTickers()
 
 	handleApiErrors(func() error {
-		var nextUrl string = initialUrl
-		//timestamp, err := getLastModificationTimestamp()
-		//if err != nil {
-		//	logEvent("info", "Couldn't get last modification timestamp ")
-		//}
-		//var nextUrl string := constructUpdateURL(timestamp)
+		//var nextUrl string = initialUrl
+		timestamp, err := getLastModificationTimestamp()
+		if err != nil {
+			logEvent("info", "Couldn't get last modification timestamp ")
+		}
+		var nextUrl string = constructUpdateURL(timestamp)
 
 		for {
 			if nextUrl == "" {
@@ -914,8 +915,7 @@ func main() {
 					return nil
 				})
 				if err != nil {
-					logEvent("error", fmt.Sprintf("Failed after multiple retries: %s", err.Error()))
-					// Decide how you want to handle persistent errors here.
+					logEvent("error", "Error: "+err.Error())
 					// You might choose to break out of the loop, wait for a longer duration, or alert someone.
 				}
 			} else {
