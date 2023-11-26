@@ -1,4 +1,4 @@
-module github.com/piotrsenkow/go-rate-limit-test
+module github.com/piotrsenkow/gosyncmls
 
 go 1.21
 
