@@ -12,6 +12,7 @@ import (
 
 var Db *sql.DB
 
+// InitializeDb initializes the database connection.
 func InitializeDb() (*sql.DB, error) {
 	//// Initialize the database connection
 	//dbConnStr := viper.GetString("DB_CONN_STRING")
@@ -24,6 +25,7 @@ func InitializeDb() (*sql.DB, error) {
 	return nil, nil
 }
 
+// insertOrUpdateProperty inserts or updates a property in the database.
 func insertOrUpdateProperty(property models.Property) (error, string) {
 	// Start a transaction
 	tx, err := Db.Begin()
@@ -351,6 +353,7 @@ func insertOrUpdateProperty(property models.Property) (error, string) {
 	return nil, ""
 }
 
+// deleteProperty deletes a property from the database.
 func deleteProperty(property models.Property) error {
 	// Start a transaction
 	tx, err := Db.Begin()
@@ -384,6 +387,7 @@ func deleteProperty(property models.Property) error {
 	return tx.Commit()
 }
 
+// ProcessData processes the data from the API response.
 func ProcessData(data []models.Property) {
 	for _, property := range data {
 		if property.MlgCanView {
@@ -402,6 +406,23 @@ func ProcessData(data []models.Property) {
 	}
 }
 
+// constructBaseURL constructs the base URL for the API request.
+func constructBaseURL(lastTimestamp time.Time) string {
+	timestampStr := lastTimestamp.Format("2006-01-02T15:04:05.999Z")
+	return "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20'mred'%20and%20ModificationTimestamp%20gt%20" + timestampStr
+}
+
+// ConstructInitialImportURL constructs the initial import URL from where it last left off.
+func ConstructInitialImportURL(lastTimestamp time.Time) string {
+	return constructBaseURL(lastTimestamp) + "%20and%20MlgCanView%20eq%20true&$expand=Rooms,UnitTypes,Media&$top=1000"
+}
+
+// ConstructUpdateURL constructs the update URL.
+func ConstructUpdateURL(lastTimestamp time.Time) string {
+	return constructBaseURL(lastTimestamp) + "&$expand=Rooms,UnitTypes,Media&$top=1000"
+}
+
+// GetLastModificationTimestamp gets the last modification timestamp from the database.
 func GetLastModificationTimestamp() (time.Time, error) {
 	query := "SELECT MAX(modification_timestamp) at time zone 'utc' FROM properties"
 
@@ -411,12 +432,6 @@ func GetLastModificationTimestamp() (time.Time, error) {
 		return time.Time{}, err
 	}
 	return timestamp, nil
-}
-
-func ConstructUpdateURL(lastTimestamp time.Time) string {
-	baseURL := "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mred%27%20and%20MlgCanView%20eq%20true%20and%20ModificationTimestamp%20gt%20"
-	timestampStr := lastTimestamp.Format("2006-01-02T15:04:05.999Z")
-	return baseURL + timestampStr + "&$expand=Rooms%2CUnitTypes%2CMedia&$top=1000"
 }
 
 // CheckIfPropertiesTableHasData Check if the properties table has any preexisting data

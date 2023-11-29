@@ -12,6 +12,7 @@ import (
 	"syscall"
 )
 
+// setupSignalHandlers is a helper function that sets up signal handlers for the program.
 func setupSignalHandlers() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
@@ -29,6 +30,7 @@ func setupSignalHandlers() {
 	}()
 }
 
+// initializeDependencies is a helper function that initializes all dependencies for the program.
 func initializeDependencies() {
 	// Initialize logger
 	utils.InitializeLogger()

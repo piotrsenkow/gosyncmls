@@ -9,11 +9,13 @@ import (
 
 var logger zerolog.Logger
 
+// InitializeLogger initializes the logger
 func InitializeLogger() {
 	zerolog.TimeFieldFormat = "2006-01-02 15:04:05.000000"
 	logger = zerolog.New(os.Stdout).With().Timestamp().Logger()
 }
 
+// LogEvent logs an event to the logger
 func LogEvent(eventType string, message string) {
 	switch eventType {
 	case "debug":
@@ -35,6 +37,7 @@ func LogEvent(eventType string, message string) {
 	}
 }
 
+// WithRetry retries a function a specified number of times
 func WithRetry(attempts int, sleep time.Duration, fn func() error) error {
 	for i := 0; ; i++ {
 		err := fn()

@@ -19,12 +19,14 @@ var (
 	perDayLimiter    *rate.Limiter
 )
 
+// InitializeRateLimiter initializes the rate limiters
 func InitializeRateLimiter() {
 	perSecondLimiter = rate.NewLimiter(1.95, 2)
 	perHourLimiter = rate.NewLimiter(rate.Limit(MaxRequestsPerHour)/3600, MaxRequestsPerHour)
 	perDayLimiter = rate.NewLimiter(rate.Limit(MaxRequestsPerDay)/86400, MaxRequestsPerDay)
 }
 
+// CanMakeRequest checks if the program can make a request to the MLSGrid API
 func CanMakeRequest() bool {
 	if !isWithinRateLimit(perDayLimiter, "day") {
 		return false
@@ -42,6 +44,7 @@ func CanMakeRequest() bool {
 		GlobalRateTracker.RequestsToday <= MaxRequestsPerDay && GlobalRateTracker.DataDownloaded <= MaxDownloadPerHour
 }
 
+// isWithinRateLimit checks if the program is within the rate limit for a given period
 func isWithinRateLimit(limiter *rate.Limiter, period string) bool {
 	reserve := limiter.Reserve()
 	if !reserve.OK() {

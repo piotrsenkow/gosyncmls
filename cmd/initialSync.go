@@ -15,11 +15,12 @@ var initialSyncCmd = &cobra.Command{
 	Use:   "initial-sync",
 	Short: "Initial data download of an MLSGrid source to one or more local database destinations",
 	Run: func(cmd *cobra.Command, args []string) {
+
 		const initialUrl = "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mred%27%20and%20MlgCanView%20eq%20true&$expand=Rooms%2CUnitTypes%2CMedia&$top=1000"
 		var nextUrl string
 		var processDataSem = make(chan struct{}, threads)
 
-		fmt.Printf("Beginning the initial download with %d threads...\n", threads)
+		fmt.Printf("Starting the initial download with %d threads...\n", threads)
 
 		hasData, err := database.CheckIfPropertiesTableHasData()
 		if err != nil {
@@ -31,7 +32,7 @@ var initialSyncCmd = &cobra.Command{
 			if err != nil {
 				utils.LogEvent("info", "Couldn't get last modification timestamp ")
 			}
-			nextUrl = database.ConstructUpdateURL(timestamp)
+			nextUrl = database.ConstructInitialImportURL(timestamp)
 		} else {
 			nextUrl = initialUrl
 		}
@@ -39,7 +40,7 @@ var initialSyncCmd = &cobra.Command{
 		// infinite for loop runs until nextUrl is empty (no nextUrl present in api response AKA update complete + up-to-date) and we then break out
 		for {
 			if nextUrl == "" {
-				utils.LogEvent("warn", "Initial-sync complete. Please verify that the latest modification_timestamp matches today's date. Switch to using the gosyncmls `start update` command from now on.")
+				utils.LogEvent("info", "Initial-sync complete. Please verify that the latest modification_timestamp in your db matches today's date. If that is the case, moving forward switch to solely using the GoSyncMLS `start update` command.")
 				break
 			}
 
@@ -75,7 +76,7 @@ var initialSyncCmd = &cobra.Command{
 				if err != nil {
 					utils.LogEvent("info", "Couldn't get last modification timestamp.")
 				}
-				nextUrl = database.ConstructUpdateURL(timestamp)
+				nextUrl = database.ConstructInitialImportURL(timestamp)
 				utils.LogEvent("info", "Sleeping for 10 seconds before trying to make another request...")
 				time.Sleep(10 * time.Second)
 			}

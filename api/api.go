@@ -13,21 +13,25 @@ import (
 
 var httpClient *http.Client
 
+// countingReader is a helper struct that counts the number of bytes read.
 type countingReader struct {
 	r io.Reader
 	n *int64
 }
 
+// Read is a helper function that reads from the reader and updates the number of bytes read.
 func (cr *countingReader) Read(p []byte) (int, error) {
 	n, err := cr.r.Read(p)
 	*cr.n += int64(n)
 	return n, err
 }
 
+// InitializeHttpClient is a helper function that initializes the http client.
 func InitializeHttpClient() {
 	httpClient = &http.Client{}
 }
 
+// MakeRequestAndUpdateCounters is a helper function that calls helper function MakeRequest2() and updates the global rate tracker counters + total bytes downloaded.
 func MakeRequestAndUpdateCounters(url string) (models.ApiResponse, error) {
 	resp, downloadSize, err := MakeRequest2(url)
 	if err != nil {
@@ -38,12 +42,11 @@ func MakeRequestAndUpdateCounters(url string) (models.ApiResponse, error) {
 	services.GlobalRateTracker.IncrementRequestsToday()
 
 	downloadedGB := float64(services.GlobalRateTracker.DataDownloaded) / float64(1024*1024*1024) // Convert bytes to GB
-	utils.LogEvent("info", "Able to make a request within rate limits")
-	utils.LogEvent("info", fmt.Sprintf("Requests this hour: %d. Requests today: %d", services.GlobalRateTracker.RequestsThisHour, services.GlobalRateTracker.RequestsToday))
-	utils.LogEvent("info", fmt.Sprintf("Downloaded %.3fGB this hour.", downloadedGB))
+	utils.LogEvent("info", fmt.Sprintf("Requests this hour: %d. Requests today: %d. Downloaded %.3fGB this hour.", services.GlobalRateTracker.RequestsThisHour, services.GlobalRateTracker.RequestsToday, downloadedGB))
 	return resp, err
 }
 
+// MakeRequest2 is a helper function that makes a request to the MLSGrid API and returns the response and the number of bytes downloaded.
 func MakeRequest2(url string) (models.ApiResponse, int64, error) {
 
 	req, err := http.NewRequest("GET", url, nil)

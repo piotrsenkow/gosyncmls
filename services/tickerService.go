@@ -13,6 +13,7 @@ var (
 	startTickersMutex sync.Mutex
 )
 
+// StartTickers starts the time tickers that reset the hourly and daily request counters
 func StartTickers() {
 	startTickersMutex.Lock()
 	defer startTickersMutex.Unlock()
