@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/piotrsenkow/gosyncmls/models"
+	"github.com/piotrsenkow/gosyncmls/services"
 	"github.com/piotrsenkow/gosyncmls/utils"
+	"github.com/spf13/viper"
 	"io"
 	"net/http"
-	"os"
 )
 
 var httpClient *http.Client
@@ -27,6 +28,22 @@ func InitializeHttpClient() {
 	httpClient = &http.Client{}
 }
 
+func MakeRequestAndUpdateCounters(url string) (models.ApiResponse, error) {
+	resp, downloadSize, err := MakeRequest2(url)
+	if err != nil {
+		utils.LogEvent("Error", "Error: "+err.Error())
+	}
+	services.GlobalRateTracker.DataDownloaded += downloadSize
+	services.GlobalRateTracker.IncrementRequestsThisHour()
+	services.GlobalRateTracker.IncrementRequestsToday()
+
+	downloadedGB := float64(services.GlobalRateTracker.DataDownloaded) / float64(1024*1024*1024) // Convert bytes to GB
+	utils.LogEvent("info", "Able to make a request within rate limits")
+	utils.LogEvent("info", fmt.Sprintf("Requests this hour: %d. Requests today: %d", services.GlobalRateTracker.RequestsThisHour, services.GlobalRateTracker.RequestsToday))
+	utils.LogEvent("info", fmt.Sprintf("Downloaded %.3fGB this hour.", downloadedGB))
+	return resp, err
+}
+
 func MakeRequest2(url string) (models.ApiResponse, int64, error) {
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -36,7 +53,12 @@ func MakeRequest2(url string) (models.ApiResponse, int64, error) {
 	}
 
 	// Add Bearer token for authentication
-	APIBearerToken := os.Getenv("API_BEARER_TOKEN")
+	//APIBearerToken := os.Getenv("API_BEARER_TOKEN")
+	APIBearerToken := viper.GetString("API_BEARER_TOKEN")
+	if APIBearerToken == "" {
+		utils.LogEvent("fatal", "Fatal error: `API_BEARER_TOKEN` not set in environment variables.")
+	}
+
 	req.Header.Add("Authorization", "Bearer "+APIBearerToken)
 
 	resp, err := httpClient.Do(req)

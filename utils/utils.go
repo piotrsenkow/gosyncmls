@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"fmt"
 	"github.com/rs/zerolog"
 	"os"
+	"time"
 )
 
 var logger zerolog.Logger
@@ -30,5 +32,23 @@ func LogEvent(eventType string, message string) {
 		logger.Trace().Msg(message)
 	default:
 		logger.Info().Msg(message)
+	}
+}
+
+func WithRetry(attempts int, sleep time.Duration, fn func() error) error {
+	for i := 0; ; i++ {
+		err := fn()
+		if err == nil {
+			return nil // success
+		}
+
+		if i >= (attempts - 1) {
+			LogEvent("fatal", "Fatal: "+err.Error())
+			return err // return the last error
+		}
+
+		LogEvent("warn", fmt.Sprintf("Attempt %d failed; retrying in %v", i+1, sleep))
+		time.Sleep(sleep)
+		sleep *= 2
 	}
 }

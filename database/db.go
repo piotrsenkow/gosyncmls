@@ -13,10 +13,9 @@ import (
 var Db *sql.DB
 
 func InitializeDb() (*sql.DB, error) {
-	// Load configurations from environment variables
-	dbConnStr := os.Getenv("DB_CONN_STRING")
-
 	//// Initialize the database connection
+	//dbConnStr := viper.GetString("DB_CONN_STRING")
+	dbConnStr := os.Getenv("DB_CONN_STRING")
 	var err error
 	Db, err = sql.Open("postgres", dbConnStr)
 	if err != nil {
@@ -418,4 +417,15 @@ func ConstructUpdateURL(lastTimestamp time.Time) string {
 	baseURL := "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mred%27%20and%20MlgCanView%20eq%20true%20and%20ModificationTimestamp%20gt%20"
 	timestampStr := lastTimestamp.Format("2006-01-02T15:04:05.999Z")
 	return baseURL + timestampStr + "&$expand=Rooms%2CUnitTypes%2CMedia&$top=1000"
+}
+
+// CheckIfPropertiesTableHasData Check if the properties table has any preexisting data
+func CheckIfPropertiesTableHasData() (bool, error) {
+	timestamp, err := GetLastModificationTimestamp()
+	if err != nil {
+		return false, err
+	}
+
+	// If timestamp is zero, then the table is empty
+	return !timestamp.IsZero(), nil
 }
