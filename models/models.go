@@ -7,9 +7,13 @@ import (
 	"time"
 )
 
+// IntValue is a custom type that allows us to parse the MLSGrid integer format
 type IntValue int
+
+// CustomTime is a custom type that allows us to parse the MLSGrid timestamp format
 type CustomTime time.Time
 
+// Property is the struct that represents the MLSGrid Property object
 type Property struct {
 	ListingId                    string    `json:"ListingId"`
 	PropertyType                 string    `json:"PropertyType"`
@@ -181,6 +185,7 @@ type Property struct {
 	Media     []Media    `json:"Media"`
 }
 
+// Room is the struct that represents the MLSGrid Room object
 type Room struct {
 	MrdFlooring    string `json:"MRD_Flooring"`
 	RoomLevel      string `json:"RoomLevel"`
@@ -189,6 +194,7 @@ type Room struct {
 	RoomKey        string `json:"RoomKey"`
 }
 
+// UnitType is the struct that represents the MLSGrid UnitType object
 type UnitType struct {
 	UnitTypeKey         string   `json:"UnitTypeKey"`
 	FloorNumber         string   `json:"MRD_FloorNumber"`
@@ -199,16 +205,19 @@ type UnitType struct {
 	UnitSecurityDeposit string   `json:"MRD_SecurityDeposit"`
 }
 
+// Media is the struct that represents the MLSGrid Media object
 type Media struct {
 	MediaKey string `json:"MediaKey"`
 	MediaURL string `json:"MediaURL"`
 }
 
+// ApiResponse is the struct that represents the MLSGrid API response
 type ApiResponse struct {
 	Data     []Property `json:"value"`
 	NextLink string     `json:"@odata.nextLink"`
 }
 
+// UnmarshalJSON is a custom unmarshaler for the IntValue type
 func (iv *IntValue) UnmarshalJSON(b []byte) error {
 	var v interface{}
 	if err := json.Unmarshal(b, &v); err != nil {
@@ -225,6 +234,7 @@ func (iv *IntValue) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// UnmarshalJSON is a custom unmarshaler for the CustomTime type
 func (ct *CustomTime) UnmarshalJSON(b []byte) error {
 	var strTime string
 	if err := json.Unmarshal(b, &strTime); err != nil {
@@ -244,6 +254,7 @@ func (ct *CustomTime) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// Value is a driver.Value interface method for CustomTime
 func (ct CustomTime) Value() (driver.Value, error) {
 	// Convert CustomTime to time.Time, then to driver.Value (which is just interface{})
 	t := time.Time(ct)
