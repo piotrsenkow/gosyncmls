@@ -245,3 +245,15 @@ EXECUTE FUNCTION update_updated_at_column();
 ALTER TABLE rooms ADD CONSTRAINT unique_listing_room UNIQUE(listing_id, room_key);
 ALTER TABLE unit_types ADD CONSTRAINT unique_listing_unit_type UNIQUE(listing_id, unit_type_key);
 ALTER TABLE medias ADD CONSTRAINT unique_listing_media UNIQUE(listing_id, media_key);
+
+CREATE INDEX idx_listing_id ON properties(listing_id);
+CREATE INDEX idx_city ON properties(city);
+CREATE INDEX idx_county_or_parish ON properties(county_or_parish);
+CREATE INDEX idx_mls_area_major ON properties(mls_area_major);
+CREATE INDEX idx_mls_status ON properties(mls_status);
+CREATE INDEX idx_mrd_type ON properties(mrd_type);
+CREATE INDEX idx_township ON properties(township);
+CREATE INDEX idx_postal_code ON properties(postal_code);
+CREATE INDEX idx_property_type ON properties(property_type);
+
+CREATE EXTENSION postgis;
