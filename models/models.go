@@ -29,7 +29,10 @@ type Property struct {
 	MlgCanView                   bool      `json:"MlgCanView"`
 	MlgCanUse                    []string  `json:"MlgCanUse"`
 	StreetNumber                 string    `json:"StreetNumber"`
+	StreetDirPrefix              string    `json:"StreetDirPrefix"`
 	StreetName                   string    `json:"StreetName"`
+	StreetSuffix                 string    `json:"StreetSuffix"`
+	UnitNumber                   string    `json:"UnitNumber"`
 	City                         string    `json:"City"`
 	PostalCode                   string    `json:"PostalCode"`
 	CountyOrParish               string    `json:"CountyOrParish"`
@@ -147,38 +150,42 @@ type Property struct {
 	MRD_UD                   string `json:"MRD_UD"`
 	MRD_UFL                  string `json:"MRD_UFL"`
 
-	NetOperatingIncome     IntValue   `json:"NetOperatingIncome"`
-	NewConstructionYN      bool       `json:"NewConstructionYN"`
-	OffMarketDate          string     `json:"OffMarketDate"`
-	OperatingExpense       IntValue   `json:"OperatingExpense"`
-	OriginalEntryTimestamp CustomTime `json:"OriginalEntryTimestamp"`
-	OtherEquipment         []string   `json:"OtherEquipment"`
-	OtherStructures        []string   `json:"OtherStructures"`
-	ParkingTotal           IntValue   `json:"ParkingTotal"`
-	PostalCodePlus4        string     `json:"PostalCodePlus4"`
-	PreviousListPrice      IntValue   `json:"PreviousListPrice"`
-	PurchaseContractDate   string     `json:"PurchaseContractDate"`
-	RentIncludes           []string   `json:"RentIncludes"`
-	StandardStatus         string     `json:"StandardStatus"`
-	StateOrProvince        string     `json:"StateOrProvince"`
-	StatusChangeTimestamp  CustomTime `json:"StatusChangeTimestamp"`
-	StreetDirPrefix        string     `json:"StreetDirPrefix"`
-	StreetSuffix           string     `json:"StreetSuffix"`
-	TotalActualRent        IntValue   `json:"TotalActualRent"`
-	TrashExpense           IntValue   `json:"TrashExpense"`
-	WaterSewerExpense      IntValue   `json:"WaterSewerExpense"`
-	Zoning                 string     `json:"Zoning"`
-	ListAgentEmail         string     `json:"ListAgentEmail"`
-	ListAgentFirstName     string     `json:"ListAgentFirstName"`
-	ListAgentLastName      string     `json:"ListAgentLastName"`
-	ListAgentFullName      string     `json:"ListAgentFullName"`
-	ListAgentMlsId         string     `json:"ListAgentMlsId"`
-	ListAgentMobilePhone   string     `json:"ListAgentMobilePhone"`
-	ListAgentKey           string     `json:"ListAgentKey"`
-	ListOfficeMlsId        string     `json:"ListOfficeMlsId"`
-	ListOfficeName         string     `json:"ListOfficeName"`
-	ListOfficePhone        string     `json:"ListOfficePhone"`
-	ListingContractDate    string     `json:"ListingContractDate"`
+	NetOperatingIncome                       IntValue   `json:"NetOperatingIncome"`
+	NewConstructionYN                        bool       `json:"NewConstructionYN"`
+	OffMarketDate                            string     `json:"OffMarketDate"`
+	OperatingExpense                         IntValue   `json:"OperatingExpense"`
+	OriginalEntryTimestamp                   CustomTime `json:"OriginalEntryTimestamp"`
+	OtherEquipment                           []string   `json:"OtherEquipment"`
+	OtherStructures                          []string   `json:"OtherStructures"`
+	ParkingTotal                             IntValue   `json:"ParkingTotal"`
+	PostalCodePlus4                          string     `json:"PostalCodePlus4"`
+	PreviousListPrice                        IntValue   `json:"PreviousListPrice"`
+	PurchaseContractDate                     string     `json:"PurchaseContractDate"`
+	RentIncludes                             []string   `json:"RentIncludes"`
+	StandardStatus                           string     `json:"StandardStatus"`
+	StateOrProvince                          string     `json:"StateOrProvince"`
+	StatusChangeTimestamp                    CustomTime `json:"StatusChangeTimestamp"`
+	MRD_ClosedBuyerBrokerageCompensation     string     `json:"MRD_ClosedBuyerBrokeageCompensation"`
+	MRD_ClosedBuyerBrokerageCompensationType string     `json:"MRD_ClosedBuyerBrokerageCompensationType"`
+	PetsAllowed                              []string   `json:"PetsAllowed"`
+	InteriorFeatures                         []string   `json:"InteriorFeatures"`
+	PrivateRemarks                           string     `json:"PrivateRemarks"`
+	VirtualTourUrl                           string     `json:"VirtualTourURLUnbranded"`
+	TotalActualRent                          IntValue   `json:"TotalActualRent"`
+	TrashExpense                             IntValue   `json:"TrashExpense"`
+	WaterSewerExpense                        IntValue   `json:"WaterSewerExpense"`
+	Zoning                                   string     `json:"Zoning"`
+	ListAgentEmail                           string     `json:"ListAgentEmail"`
+	ListAgentFirstName                       string     `json:"ListAgentFirstName"`
+	ListAgentLastName                        string     `json:"ListAgentLastName"`
+	ListAgentFullName                        string     `json:"ListAgentFullName"`
+	ListAgentMlsId                           string     `json:"ListAgentMlsId"`
+	ListAgentMobilePhone                     string     `json:"ListAgentMobilePhone"`
+	ListAgentKey                             string     `json:"ListAgentKey"`
+	ListOfficeMlsId                          string     `json:"ListOfficeMlsId"`
+	ListOfficeName                           string     `json:"ListOfficeName"`
+	ListOfficePhone                          string     `json:"ListOfficePhone"`
+	ListingContractDate                      string     `json:"ListingContractDate"`
 
 	UnitTypes []UnitType `json:"UnitTypes"`
 	Rooms     []Room     `json:"Rooms"`

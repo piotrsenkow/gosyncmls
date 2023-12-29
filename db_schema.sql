@@ -16,7 +16,10 @@ CREATE TABLE properties (
     mlg_can_view BOOLEAN,
     mlg_can_use TEXT[], -- Using array for string slices
     street_number TEXT,
+    street_dir_prefix TEXT,
     street_name TEXT,
+    street_suffix TEXT,
+    unit_number TEXT,
     city TEXT,
     postal_code TEXT,
     county_or_parish TEXT,
@@ -150,8 +153,13 @@ CREATE TABLE properties (
     standard_status TEXT,
     state_or_province TEXT,
     status_change_timestamp timestamptz,
-    street_dir_prefix TEXT,
-    street_suffix TEXT,
+
+    mrd_closed_buyer_brokerage_compensation TEXT,
+    mrd_closed_buyer_brokerage_compensation_type TEXT,
+    pets_allowed TEXT[],
+    interior_features TEXT[],
+    private_remarks TEXT,
+    virtual_tour_url TEXT,
     total_actual_rent INT,
     trash_expense INT,
     water_sewer_expense INT,
@@ -245,3 +253,14 @@ EXECUTE FUNCTION update_updated_at_column();
 ALTER TABLE rooms ADD CONSTRAINT unique_listing_room UNIQUE(listing_id, room_key);
 ALTER TABLE unit_types ADD CONSTRAINT unique_listing_unit_type UNIQUE(listing_id, unit_type_key);
 ALTER TABLE medias ADD CONSTRAINT unique_listing_media UNIQUE(listing_id, media_key);
+
+CREATE INDEX idx_city ON properties(city);
+CREATE INDEX idx_county_or_parish ON properties(county_or_parish);
+CREATE INDEX idx_mls_area_major ON properties(mls_area_major);
+CREATE INDEX idx_mls_status ON properties(mls_status);
+CREATE INDEX idx_mrd_type ON properties(mrd_type);
+CREATE INDEX idx_township ON properties(township);
+CREATE INDEX idx_postal_code ON properties(postal_code);
+CREATE INDEX idx_property_type ON properties(property_type);
+
+CREATE EXTENSION postgis;
