@@ -2,7 +2,8 @@
 SET TIME ZONE 'UTC';
 
 CREATE TABLE properties (
-    listing_id TEXT PRIMARY KEY,
+    ra_pid SERIAL PRIMARY KEY,
+    listing_id TEXT UNIQUE NOT NULL,
     property_type TEXT,
     mrd_type TEXT,
     mls_status TEXT,
@@ -183,7 +184,8 @@ CREATE TABLE properties (
 -- Rooms Table
 CREATE TABLE rooms (
     room_id SERIAL PRIMARY KEY,
-    listing_id TEXT REFERENCES properties(listing_id),
+    property_id INT REFERENCES properties(ra_pid),
+--     listing_id TEXT,
     mrd_flooring TEXT,
     room_level TEXT,
     room_dimensions TEXT,
@@ -196,7 +198,8 @@ CREATE TABLE rooms (
 -- UnitTypes Table
 CREATE TABLE unit_types (
     unit_type_id SERIAL PRIMARY KEY,
-    listing_id TEXT REFERENCES properties(listing_id),
+    property_id INT REFERENCES properties(ra_pid),
+--     listing_id TEXT,
     unit_type_key TEXT,
     floor_number TEXT,
     unit_number TEXT,
@@ -211,14 +214,14 @@ CREATE TABLE unit_types (
 -- Medias Table
 CREATE TABLE medias (
     media_id SERIAL PRIMARY KEY,
-    listing_id TEXT REFERENCES properties(listing_id),
+    property_id INT REFERENCES properties(ra_pid),
+--     listing_id TEXT,
     media_key TEXT,
     media_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_listing_id ON properties(listing_id);
 
 -- Function to update 'updated_at' column
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -250,10 +253,15 @@ BEFORE UPDATE ON medias
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 
-ALTER TABLE rooms ADD CONSTRAINT unique_listing_room UNIQUE(listing_id, room_key);
-ALTER TABLE unit_types ADD CONSTRAINT unique_listing_unit_type UNIQUE(listing_id, unit_type_key);
-ALTER TABLE medias ADD CONSTRAINT unique_listing_media UNIQUE(listing_id, media_key);
+ALTER TABLE rooms ADD CONSTRAINT unique_listing_room UNIQUE(property_id, room_key);
+ALTER TABLE unit_types ADD CONSTRAINT unique_listing_unit_type UNIQUE(property_id, unit_type_key);
+ALTER TABLE medias ADD CONSTRAINT unique_listing_media UNIQUE(property_id, media_key);
 
+
+CREATE INDEX idx_properties_listing_id ON properties(listing_id);
+CREATE INDEX idx_rooms_property_ra_pid ON rooms(property_id);
+CREATE INDEX idx_unit_types_ra_pid ON unit_types(property_id);
+CREATE INDEX idx_medias_ra_pid ON medias(property_id);
 CREATE INDEX idx_city ON properties(city);
 CREATE INDEX idx_county_or_parish ON properties(county_or_parish);
 CREATE INDEX idx_mls_area_major ON properties(mls_area_major);
@@ -262,5 +270,4 @@ CREATE INDEX idx_mrd_type ON properties(mrd_type);
 CREATE INDEX idx_township ON properties(township);
 CREATE INDEX idx_postal_code ON properties(postal_code);
 CREATE INDEX idx_property_type ON properties(property_type);
-
-CREATE EXTENSION postgis;
+CREATE INDEX idx_mrd_type ON properties(mrd_type);

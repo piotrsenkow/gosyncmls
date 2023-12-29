@@ -34,9 +34,9 @@ func insertOrUpdateProperty(property models.Property) (error, string) {
 		return err, "line 33"
 	}
 	utils.LogEvent("info", fmt.Sprintf("Inserting/Updating Property: %+v", property))
-
+	var realtyAnalyticaPropertyId int
 	// Insert or update into the properties table
-	result, err := tx.Exec(`
+	err = tx.QueryRow(`
         INSERT INTO properties (
             listing_id, property_type, mrd_type, mls_status, 
             original_list_price, list_price, close_price, association_fee, 
@@ -253,6 +253,7 @@ func insertOrUpdateProperty(property models.Property) (error, string) {
 			list_office_name = EXCLUDED.list_office_name,
 			list_office_phone = EXCLUDED.list_office_phone,
 			listing_contract_date = EXCLUDED.listing_contract_date
+        RETURNING ra_pid
     `,
 		property.ListingId, property.PropertyType, property.MRDType, property.MLSStatus,
 		property.OriginalListPrice, property.ListPrice, property.ClosePrice, property.AssociationFee,
@@ -288,25 +289,24 @@ func insertOrUpdateProperty(property models.Property) (error, string) {
 		property.TotalActualRent, property.TrashExpense, property.WaterSewerExpense, property.Zoning, property.ListAgentEmail,
 		property.ListAgentFirstName, property.ListAgentLastName, property.ListAgentFullName, property.ListAgentMlsId, property.ListAgentMobilePhone,
 		property.ListAgentKey, property.ListOfficeMlsId, property.ListOfficeName, property.ListOfficePhone, property.ListingContractDate,
-	)
+	).Scan(&realtyAnalyticaPropertyId)
 	if err != nil {
 		utils.LogEvent("error", "Error on line 677: "+err.Error())
 		return err, "line 677"
 	}
-	rowsAffected, _ := result.RowsAffected()
-	utils.LogEvent("info", fmt.Sprintf("Rows Affected in properties: %d", rowsAffected))
+	utils.LogEvent("info", fmt.Sprintf("Created ra_pID: %d", realtyAnalyticaPropertyId))
 
 	// Insert into the rooms table
 	for _, room := range property.Rooms {
-		result, err = tx.Exec(`
-        INSERT INTO rooms (listing_id, mrd_flooring, room_level, room_dimensions, room_type, room_key)
+		result, err := tx.Exec(`
+        INSERT INTO rooms (property_id, mrd_flooring, room_level, room_dimensions, room_type, room_key)
         VALUES ($1, $2, $3, $4, $5, $6)
-        ON CONFLICT (listing_id, room_key) DO UPDATE SET 
+        ON CONFLICT (property_id, room_key) DO UPDATE SET 
             mrd_flooring = EXCLUDED.mrd_flooring,
             room_level = EXCLUDED.room_level,
             room_dimensions = EXCLUDED.room_dimensions,
             room_type = EXCLUDED.room_type
-    `, property.ListingId, room.MrdFlooring, room.RoomLevel, room.RoomDimensions, room.RoomType, room.RoomKey)
+    `, realtyAnalyticaPropertyId, room.MrdFlooring, room.RoomLevel, room.RoomDimensions, room.RoomType, room.RoomKey)
 		if err != nil {
 			utils.LogEvent("error", "Error on line 695")
 			return err, "line 695"
@@ -317,17 +317,17 @@ func insertOrUpdateProperty(property models.Property) (error, string) {
 
 	// Insert into the unit_types table
 	for _, unitType := range property.UnitTypes {
-		result, err = tx.Exec(`
-        INSERT INTO unit_types (listing_id, unit_type_key, floor_number, unit_number, unit_bedrooms_total, unit_bathrooms_total, unit_total_rent, unit_security_deposit)
+		result, err := tx.Exec(`
+        INSERT INTO unit_types (property_id, unit_type_key, floor_number, unit_number, unit_bedrooms_total, unit_bathrooms_total, unit_total_rent, unit_security_deposit)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-        ON CONFLICT (listing_id, unit_type_key) DO UPDATE SET 
+        ON CONFLICT (property_id, unit_type_key) DO UPDATE SET 
             floor_number = EXCLUDED.floor_number,
             unit_number = EXCLUDED.unit_number,
             unit_bedrooms_total = EXCLUDED.unit_bedrooms_total,
             unit_bathrooms_total = EXCLUDED.unit_bathrooms_total,
             unit_total_rent = EXCLUDED.unit_total_rent,
             unit_security_deposit = EXCLUDED.unit_security_deposit
-    `, property.ListingId, unitType.UnitTypeKey, unitType.FloorNumber, unitType.UnitNumber, unitType.UnitBedroomsTotal, unitType.UnitBathroomsTotal, unitType.UnitTotalRent, unitType.UnitSecurityDeposit)
+    `, realtyAnalyticaPropertyId, unitType.UnitTypeKey, unitType.FloorNumber, unitType.UnitNumber, unitType.UnitBedroomsTotal, unitType.UnitBathroomsTotal, unitType.UnitTotalRent, unitType.UnitSecurityDeposit)
 		if err != nil {
 			utils.LogEvent("error", "Error on line 716")
 			return err, "line 321"
@@ -338,12 +338,12 @@ func insertOrUpdateProperty(property models.Property) (error, string) {
 
 	// Insert into the medias table
 	for _, media := range property.Media {
-		result, err = tx.Exec(`
-        INSERT INTO medias (listing_id, media_key, media_url)
+		result, err := tx.Exec(`
+        INSERT INTO medias (property_id, media_key, media_url)
         VALUES ($1, $2, $3)
-        ON CONFLICT (listing_id, media_key) DO UPDATE SET 
+        ON CONFLICT (property_id, media_key) DO UPDATE SET 
             media_url = EXCLUDED.media_url
-    `, property.ListingId, media.MediaKey, media.MediaURL)
+    `, realtyAnalyticaPropertyId, media.MediaKey, media.MediaURL)
 		if err != nil {
 			utils.LogEvent("error", "Error on line 732")
 			return err, "line 337"
@@ -372,24 +372,31 @@ func deleteProperty(property models.Property) error {
 		return err
 	}
 
+	// Get the property_id for the given listing_id
+	var propertyId int
+	err = tx.QueryRow("SELECT ra_pid FROM properties WHERE listing_id = $1", property.ListingId).Scan(&propertyId)
+	if err != nil {
+		return err // Handle error, property_id not found
+	}
+
 	// Delete from the child tables first to respect foreign key constraints
-	_, err = tx.Exec(`DELETE FROM medias WHERE listing_id = $1`, property.ListingId)
+	_, err = tx.Exec(`DELETE FROM medias WHERE property_id = $1`, propertyId)
 	if err != nil {
 		return err
 	}
 
-	_, err = tx.Exec(`DELETE FROM unit_types WHERE listing_id = $1`, property.ListingId)
+	_, err = tx.Exec(`DELETE FROM unit_types WHERE property_id = $1`, propertyId)
 	if err != nil {
 		return err
 	}
 
-	_, err = tx.Exec(`DELETE FROM rooms WHERE listing_id = $1`, property.ListingId)
+	_, err = tx.Exec(`DELETE FROM rooms WHERE property_id = $1`, propertyId)
 	if err != nil {
 		return err
 	}
 
 	// Delete from the properties table
-	_, err = tx.Exec(`DELETE FROM properties WHERE listing_id = $1`, property.ListingId)
+	_, err = tx.Exec(`DELETE FROM properties WHERE property_id = $1`, propertyId)
 	if err != nil {
 		return err
 	}
