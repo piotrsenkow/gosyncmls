@@ -8,6 +8,8 @@ import (
 	"github.com/piotrsenkow/gosyncmls/services"
 	"github.com/piotrsenkow/gosyncmls/utils"
 	"github.com/spf13/cobra"
+	"os"
+	"sync"
 	"time"
 )
 
@@ -19,6 +21,7 @@ var updateCmd = &cobra.Command{
 
 		var nextUrl string
 		var processDataSem = make(chan struct{}, threads)
+		var wg sync.WaitGroup
 
 		fmt.Printf("Starting update with %d threads...\n", threads)
 
@@ -29,9 +32,11 @@ var updateCmd = &cobra.Command{
 		nextUrl = database.ConstructUpdateURL(timestamp)
 		for {
 			if nextUrl == "" {
-				utils.LogEvent("info", "Update complete. Ctrl+C to exit GoSyncMLS cli. Sleeping for 15 minutes before starting next update...")
-				time.Sleep(15 * time.Minute)
-				continue
+				utils.LogEvent("info", "Waiting for all process data jobs to complete...")
+				wg.Wait()
+				utils.LogEvent("info", "Update complete. Exiting with exit code 0.")
+				os.Exit(0)
+
 			}
 
 			if services.CanMakeRequest() {
@@ -49,8 +54,12 @@ var updateCmd = &cobra.Command{
 					processDataSem <- struct{}{}
 					utils.LogEvent("info", "Process data worker token acquired.")
 
+					// Increment the WaitGroup counter
+					wg.Add(1)
+
 					// process data in a go routine
 					go func(response models.ApiResponse) {
+						defer wg.Done() // Decrement the counter when the goroutine completes
 						database.ProcessData(response.Data)
 						// release the semaphore token once completes
 						<-processDataSem
